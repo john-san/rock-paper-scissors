@@ -90,23 +90,50 @@ function scissorsScenarios(computerSelection) {
   return result;
 }
 
-function calculateScore(num) {
-  switch(num) {
-    case 1:
-      // increment player score
-      break;
-    case 0:
-      // do nothing;
-      break;
-    case -1:
-      // increment computer score
-    break;
-  }
-  console.log(scoreBoard);
-}
+
 function game() {
+  let playerScore = 0;
+  let computerScore = 0;
+  let roundNumber = 0;
+
+  function calculateScore(num) {
+    switch(num) {
+      case 1:
+        playerScore++;
+        break;
+      case 0:
+        // do nothing;
+        break;
+      case -1:
+        computerScore++
+      break;
+    }
+    console.log(`Player: ${playerScore}; Computer: ${computerScore}`);
+  }
+
+  while (roundNumber <= 5) {
+    const computerSelection = computerPlay();
+    const playerSelection = getPlayerSelection();
+
+
+    roundNumber++;
+  }
+}
+
+
+function getPlayerSelection() {
+
+  let validated = false;
+  let validAnswers = ['rock', 'paper', 'scissors'];
+  while (validated == false) {
+    let answer = prompt("Enter your selection: rock, paper, or scissors");
+    let lowerCasedAnswer = answer.toLowerCase();
+
+  }
+
+
 
 }
-const playerSelection = 'rock';
-const computerSelection = computerPlay();
+
+
 // console.log(playRound(playerSelection, computerSelection));
