@@ -1,5 +1,3 @@
-console.log('hello world');
-
 function computerPlay() {
   const randomNum = getRandomNumber();
   let choice;
@@ -11,6 +9,7 @@ function computerPlay() {
     choice = "scissors"
   }
 
+  console.log(`The Computer picked ${choice}.`);
   return choice;
 }
 
@@ -41,13 +40,16 @@ function rockScenarios(computerSelection) {
 
   switch(computerSelection) {
     case "rock":
-      result = "Rock vs Rock; It's a tie!";
+      console.log("Rock vs Rock; It's a tie!");
+      result = 0;
       break;
     case "paper":
-      result = "Rock vs Paper; You lose!";
+      console.log("Rock vs Paper; You lose!");
+      result = -1;
       break;
     case "scissors":
-      result = "Rock vs Scissors; You win!";
+      console.log("Rock vs Scissors; You win!");
+      result = 1;
       break;
   }
 
@@ -59,13 +61,16 @@ function paperScenarios(computerSelection) {
 
   switch(computerSelection) {
     case "rock":
-      result = "Paper vs Rock; You win!";
+      console.log("Paper vs Rock; You win!");
+      result = 1;
       break;
     case "paper":
-      result = "Paper vs Paper; It's a tie!";
+      console.log("Paper vs Paper; It's a tie!");
+      result = 0;
       break;
     case "scissors":
-      result = "Paper vs Scissors; You lose!";
+      console.log("Paper vs Scissors; You lose!");
+      result = -1;
       break;
     }
 
@@ -77,13 +82,16 @@ function scissorsScenarios(computerSelection) {
 
   switch(computerSelection) {
     case "rock":
-      result = "Paper vs Rock; You win!";
+      console.log("Paper vs Rock; You win!");
+      result = 1;
       break;
     case "paper":
-      result = "Paper vs Paper; It's a tie!";
+      console.log("Paper vs Paper; It's a tie!");
+      result = 0;
       break;
     case "scissors":
-      result = "Paper vs Scissors; You lose!";
+      console.log("Paper vs Scissors; You lose!");
+      result = -1;
       break;
   }
 
@@ -96,8 +104,9 @@ function game() {
   let computerScore = 0;
   let roundNumber = 0;
 
-  function calculateScore(num) {
-    switch(num) {
+  function calculateScore(result) {
+    // console.log(`result: ${result}`);
+    switch(result) {
       case 1:
         playerScore++;
         break;
@@ -105,35 +114,60 @@ function game() {
         // do nothing;
         break;
       case -1:
-        computerScore++
+        computerScore++;
       break;
     }
+  }
+
+  function tellScoreboard() {
     console.log(`Player: ${playerScore}; Computer: ${computerScore}`);
+    console.log(`Round ${roundNumber} completed.`);
   }
 
-  while (roundNumber <= 5) {
-    const computerSelection = computerPlay();
-    const playerSelection = getPlayerSelection();
+  function tellFinalScore() {
+    console.log("Game over!");
+    console.log(`Final Scoreboard`);
+    console.log(`Player: ${playerScore}; Computer: ${computerScore}`);
+    if (playerScore > computerScore) {
+      console.log('You are the champion!');
+    } else if (playerScore == computerScore) {
+      console.log('You guys tied!  Nobody wins!');
+    } else {
+      console.log('The Computer is the champion!');
+    }
+  }
 
-
+  while (roundNumber < 5) {
     roundNumber++;
+    const playerSelection = getPlayerSelection();
+    const computerSelection = computerPlay();
+    const result = playRound(playerSelection, computerSelection);
+    calculateScore(result);
+    tellScoreboard();
   }
+
+  tellFinalScore();
 }
 
 
 function getPlayerSelection() {
 
   let validated = false;
-  let validAnswers = ['rock', 'paper', 'scissors'];
+  let answer;
+  const validAnswers = ['rock', 'paper', 'scissors'];
   while (validated == false) {
-    let answer = prompt("Enter your selection: rock, paper, or scissors");
-    let lowerCasedAnswer = answer.toLowerCase();
-
+    answer = prompt("Enter your selection: rock, paper, or scissors").toLowerCase();
+    if (validAnswers.indexOf(answer) > -1) {
+      console.log(`You picked ${answer}.`);
+      validated = true;
+    } else {
+      alert("Hmm, that doesn't seem to be a valid answer.  Let's try this again.");
+    }
   }
 
 
-
+  return answer;
 }
 
-
-// console.log(playRound(playerSelection, computerSelection));
+// Start game
+game();
