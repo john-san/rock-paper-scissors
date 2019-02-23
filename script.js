@@ -170,4 +170,4 @@ function getPlayerSelection() {
 }
 
 // Start game
-game();
+// game();
