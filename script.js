@@ -150,24 +150,36 @@ function game() {
 }
 
 
-function getPlayerSelection() {
-
-  let validated = false;
-  let answer;
-  const validAnswers = ['rock', 'paper', 'scissors'];
-  while (validated == false) {
-    answer = prompt("Enter your selection: rock, paper, or scissors").toLowerCase();
-    if (validAnswers.indexOf(answer) > -1) {
-      console.log(`You picked ${answer}.`);
-      validated = true;
-    } else {
-      alert("Hmm, that doesn't seem to be a valid answer.  Let's try this again.");
-    }
-  }
-
-
-  return answer;
+function getPlayerSelection(event) {
+  console.log(`event.target.id: ${event.target.id}`);
+  const selection = event.target.id;
+  return selection;
+  // let validated = false;
+  // let answer;
+  // const validAnswers = ['rock', 'paper', 'scissors'];
+  // while (validated == false) {
+  //   answer = prompt("Enter your selection: rock, paper, or scissors").toLowerCase();
+  //   if (validAnswers.indexOf(answer) > -1) {
+  //     console.log(`You picked ${answer}.`);
+  //     validated = true;
+  //   } else {
+  //     alert("Hmm, that doesn't seem to be a valid answer.  Let's try this again.");
+  //   }
+  // }
+  //
+  //
+  // return answer;
 }
 
-// Start game
-// game();
+function startGame(event) {
+  let newControls = `Pick your choice!<br><br>
+  <button id="rock">Rock</button> <button id="paper">Paper</button> <button id="scissors">Scissors</button>`
+  console.log("game started");
+  controls.innerHTML = newControls;
+}
+
+
+$("#startBtn").click(startGame);
+$("#controls").on("click", "#rock", getPlayerSelection);
+$("#controls").on("click", "#paper", getPlayerSelection);
+$("#controls").on("click", "#scissors", getPlayerSelection);
