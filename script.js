@@ -1,3 +1,19 @@
+function addGameMessage(message) {
+  $("#gameText").append(`${message}<br>`);
+}
+
+function wipeGameMessages() {
+  $("#gameText").text('');
+}
+
+function resetGame() {
+  playerScore = 0;
+  computerScore = 0;
+  roundNumber = 0;
+  wipeGameMessages();
+  updateScoreboard();
+}
+
 function computerPlay() {
   const randomNum = getRandomNumber();
   let choice;
@@ -9,7 +25,8 @@ function computerPlay() {
     choice = "scissors";
   }
 
-  console.log(`The Computer picked ${choice}.`);
+  // console.log(`The Computer picked ${choice}.`);
+  addGameMessage(`The Computer picked ${choice}.`);
   return choice;
 }
 
@@ -19,7 +36,9 @@ function getRandomNumber() {
 }
 
 function playRound(event) {
+  wipeGameMessages();
   roundNumber++;
+  addGameMessage(`<br><b>Round ${roundNumber} started.</b>`);
   let result;
   let playerSelection = getPlayerSelection(event);
   let computerSelection = computerPlay();
@@ -46,15 +65,18 @@ function rockScenarios(computerSelection) {
 
   switch(computerSelection) {
     case "rock":
-      console.log("Rock vs Rock; It's a tie!");
+      // console.log("Rock vs Rock; It's a tie!");
+      addGameMessage("Rock vs Rock; It's a tie!");
       result = 0;
       break;
     case "paper":
-      console.log("Rock vs Paper; You lose!");
+      // console.log("Rock vs Paper; You lose!");
+      addGameMessage("Rock vs Paper; You lose!");
       result = -1;
       break;
     case "scissors":
-      console.log("Rock vs Scissors; You win!");
+      // console.log("Rock vs Scissors; You win!");
+      addGameMessage("Rock vs Scissors; You win!");
       result = 1;
       break;
   }
@@ -67,15 +89,18 @@ function paperScenarios(computerSelection) {
 
   switch(computerSelection) {
     case "rock":
-      console.log("Paper vs Rock; You win!");
+      // console.log("Paper vs Rock; You win!");
+      addGameMessage("Paper vs Rock; You win!");
       result = 1;
       break;
     case "paper":
-      console.log("Paper vs Paper; It's a tie!");
+      // console.log("Paper vs Paper; It's a tie!");
+      addGameMessage("Paper vs Paper; It's a tie!");
       result = 0;
       break;
     case "scissors":
-      console.log("Paper vs Scissors; You lose!");
+      // console.log("Paper vs Scissors; You lose!");
+      addGameMessage("Paper vs Scissors; You lose!");
       result = -1;
       break;
     }
@@ -88,15 +113,18 @@ function scissorsScenarios(computerSelection) {
 
   switch(computerSelection) {
     case "rock":
-      console.log("Paper vs Rock; You win!");
+      // console.log("Paper vs Rock; You win!");
+      addGameMessage("Paper vs Rock; You win!");
       result = 1;
       break;
     case "paper":
-      console.log("Paper vs Paper; It's a tie!");
+      // console.log("Paper vs Paper; It's a tie!");
+      addGameMessage("Paper vs Paper; It's a tie!");
       result = 0;
       break;
     case "scissors":
-      console.log("Paper vs Scissors; You lose!");
+      // console.log("Paper vs Scissors; You lose!");
+      addGameMessage("Paper vs Scissors; You lose!");
       result = -1;
       break;
   }
@@ -121,8 +149,10 @@ function calculateScore(result) {
 }
 
 function tellScoreboard() {
-  console.log(`Player: ${playerScore}; Computer: ${computerScore}`);
-  console.log(`Round ${roundNumber} completed.`);
+  // console.log(`Player: ${playerScore}; Computer: ${computerScore}`);
+  // console.log(`Round ${roundNumber} completed.`);
+  addGameMessage(`Player: ${playerScore}; Computer: ${computerScore}`);
+  addGameMessage(`Round ${roundNumber} completed.`);
 }
 
 function tellFinalScore() {
@@ -160,7 +190,8 @@ function tellFinalScore() {
 function getPlayerSelection(event) {
   // console.log(`event.target.id: ${event.target.id}`);
   const selection = event.target.id;
-  console.log(`You picked ${selection}.`);
+  // console.log(`You picked ${selection}.`);
+  addGameMessage(`You picked ${selection}.`);
   return selection;
   // let validated = false;
   // let answer;
@@ -191,10 +222,11 @@ function updateScoreboard() {
 }
 
 function startGame(event) {
-  let newControls = `Pick your choice!<br><br>
-  <button id="rock">Rock</button> <button id="paper">Paper</button> <button id="scissors">Scissors</button>`
+  let newControls = `<div>Pick your choice!<br><br>
+  <button id="rock">Rock</button> <button id="paper">Paper</button> <button id="scissors">Scissors</button></div>`
   console.log("game started");
   controls.innerHTML = newControls;
+  $("#resetGameContainer").append('<button id="resetBtn">Reset Game</button><br><br>');
   updateScoreboard();
 }
 
@@ -204,3 +236,4 @@ $("#startBtn").click(startGame);
 $("#controls").on("click", "#rock", playRound);
 $("#controls").on("click", "#paper", playRound);
 $("#controls").on("click", "#scissors", playRound);
+$("resetGameContainer").on("click", "#resetBtn", resetGame);
