@@ -6,7 +6,7 @@ function computerPlay() {
   } else if (randomNum > 0.33 && randomNum <= 0.66) {
     choice = "paper";
   } else {
-    choice = "scissors"
+    choice = "scissors";
   }
 
   console.log(`The Computer picked ${choice}.`);
@@ -18,8 +18,11 @@ function getRandomNumber() {
   return randomNum;
 }
 
-function playRound(playerSelection, computerSelection) {
+function playRound(event) {
+  roundNumber++;
   let result;
+  let playerSelection = getPlayerSelection(event);
+  let computerSelection = computerPlay();
   switch(playerSelection) {
     case "rock":
       result = rockScenarios(computerSelection);
@@ -31,7 +34,10 @@ function playRound(playerSelection, computerSelection) {
       result = scissorsScenarios(computerSelection);
       break;
   }
-
+  // console.log(`result: ${result}`);
+  calculateScore(result);
+  tellScoreboard();
+  updateScoreboard();
   return result;
 }
 
@@ -99,60 +105,62 @@ function scissorsScenarios(computerSelection) {
 }
 
 
-function game() {
-  let playerScore = 0;
-  let computerScore = 0;
-  let roundNumber = 0;
-
-  function calculateScore(result) {
-    // console.log(`result: ${result}`);
-    switch(result) {
-      case 1:
-        playerScore++;
-        break;
-      case 0:
-        // do nothing;
-        break;
-      case -1:
-        computerScore++;
+function calculateScore(result) {
+  // console.log(`result: ${result}`);
+  switch(result) {
+    case 1:
+      playerScore++;
       break;
-    }
+    case 0:
+      // do nothing;
+      break;
+    case -1:
+      computerScore++;
+    break;
   }
+}
 
-  function tellScoreboard() {
-    console.log(`Player: ${playerScore}; Computer: ${computerScore}`);
-    console.log(`Round ${roundNumber} completed.`);
+function tellScoreboard() {
+  console.log(`Player: ${playerScore}; Computer: ${computerScore}`);
+  console.log(`Round ${roundNumber} completed.`);
+}
+
+function tellFinalScore() {
+  console.log("Game over!");
+  console.log(`Final Scoreboard`);
+  console.log(`Player: ${playerScore}; Computer: ${computerScore}`);
+  if (playerScore > computerScore) {
+    console.log('You are the champion!');
+  } else if (playerScore == computerScore) {
+    console.log('You guys tied!  Nobody wins!');
+  } else {
+    console.log('The Computer is the champion!');
   }
-
-  function tellFinalScore() {
-    console.log("Game over!");
-    console.log(`Final Scoreboard`);
-    console.log(`Player: ${playerScore}; Computer: ${computerScore}`);
-    if (playerScore > computerScore) {
-      console.log('You are the champion!');
-    } else if (playerScore == computerScore) {
-      console.log('You guys tied!  Nobody wins!');
-    } else {
-      console.log('The Computer is the champion!');
-    }
-  }
-
-  while (roundNumber < 5) {
-    roundNumber++;
-    const playerSelection = getPlayerSelection();
-    const computerSelection = computerPlay();
-    const result = playRound(playerSelection, computerSelection);
-    calculateScore(result);
-    tellScoreboard();
-  }
-
-  tellFinalScore();
 }
 
 
+// function initializeGame() {
+//   let playerScore = 0;
+//   let computerScore = 0;
+//   let roundNumber = 0;
+
+  // while (roundNumber < 5) {
+  //   roundNumber++;
+  //   const playerSelection = getPlayerSelection();
+  //   const computerSelection = computerPlay();
+  //   const result = playRound(playerSelection, computerSelection);
+  //   calculateScore(result);
+  //   tellScoreboard();
+  // }
+
+  // tellFinalScore();
+// }
+
+
 function getPlayerSelection(event) {
-  console.log(`event.target.id: ${event.target.id}`);
+  // console.log(`event.target.id: ${event.target.id}`);
   const selection = event.target.id;
+  console.log(`You picked ${selection}.`);
   return selection;
   // let validated = false;
   // let answer;
@@ -171,15 +179,28 @@ function getPlayerSelection(event) {
   // return answer;
 }
 
+// Global Variables
+let playerScore = 0;
+let computerScore = 0;
+let roundNumber = 0;
+
+function updateScoreboard() {
+  $("#playerScore").text(playerScore);
+  $("#computerScore").text(computerScore);
+  $("#roundNumber").text(roundNumber);
+}
+
 function startGame(event) {
   let newControls = `Pick your choice!<br><br>
   <button id="rock">Rock</button> <button id="paper">Paper</button> <button id="scissors">Scissors</button>`
   console.log("game started");
   controls.innerHTML = newControls;
+  updateScoreboard();
 }
 
 
+
 $("#startBtn").click(startGame);
-$("#controls").on("click", "#rock", getPlayerSelection);
-$("#controls").on("click", "#paper", getPlayerSelection);
-$("#controls").on("click", "#scissors", getPlayerSelection);
+$("#controls").on("click", "#rock", playRound);
+$("#controls").on("click", "#paper", playRound);
+$("#controls").on("click", "#scissors", playRound);
