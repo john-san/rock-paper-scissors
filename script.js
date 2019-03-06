@@ -11,6 +11,7 @@ function resetGame() {
   computerScore = 0;
   roundNumber = 0;
   wipeGameMessages();
+  $("#gameText").append('<br><b>Game Reset!!</b>');
   updateScoreboard();
 }
 
@@ -236,4 +237,4 @@ $("#startBtn").click(startGame);
 $("#controls").on("click", "#rock", playRound);
 $("#controls").on("click", "#paper", playRound);
 $("#controls").on("click", "#scissors", playRound);
-$("resetGameContainer").on("click", "#resetBtn", resetGame);
+$("#resetGameContainer").on("click", "#resetBtn", resetGame);
