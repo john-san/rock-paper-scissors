@@ -41,12 +41,12 @@ function getRandomNumber() {
   return randomNum;
 }
 
-function playRound(event) {
+function playRound(playerSelection) {
   wipeGameMessages();
   roundNumber++;
   addGameMessage(`Round ${roundNumber} started.`);
+  addGameMessage(`You picked ${playerSelection}.`);
   let result;
-  let playerSelection = getPlayerSelection(event);
   let computerSelection = computerPlay();
   switch(playerSelection) {
     case "rock":
@@ -193,12 +193,12 @@ function tellFinalScore() {
 // }
 
 
-function getPlayerSelection(event) {
+// function getPlayerSelection(event) {
   // console.log(`event.target.id: ${event.target.id}`);
-  const selection = event.target.id;
+  // const selection = event.target.id;
   // console.log(`You picked ${selection}.`);
-  addGameMessage(`You picked ${selection}.`);
-  return selection;
+  // addGameMessage(`You picked ${selection}.`);
+  // return selection;
   // let validated = false;
   // let answer;
   // const validAnswers = ['rock', 'paper', 'scissors'];
@@ -214,7 +214,7 @@ function getPlayerSelection(event) {
   //
   //
   // return answer;
-}
+// }
 
 // Global Variables
 let playerScore = 0;
@@ -229,9 +229,12 @@ function updateScoreboard() {
 
 function startGame(event) {
   const newControls = document.createElement('div');
+  newControls.setAttribute("id", "instructions");
   newControls.textContent = "Pick your choice!"
 
   const buttonRow = document.createElement('div');
+  buttonRow.classList.add("buttonRow");
+
   function createButton(name) {
     const button = document.createElement('button');
     button.setAttribute('id', name);
@@ -259,12 +262,19 @@ function startGame(event) {
 }
 
 
+// Events
+
 document.querySelector("#startBtn").addEventListener("click", startGame);
 
-// add event listener to parent controls
-// if target is button, send it to playRound
+document.querySelector("#controls").addEventListener("click", (e) => {
+  if (e.target.localName == "button" && e.target.id != "startBtn") {
+    const playerSelection = e.target.id;
+    playRound(playerSelection);
+  }
+});
 
-// $("#controls").on("click", "#rock", playRound);
-// $("#controls").on("click", "#paper", playRound);
-// $("#controls").on("click", "#scissors", playRound);
-// $("#resetGame").on("click", "#reset", resetGame);
+document.querySelector("#resetGame").addEventListener("click", (e) => {
+  if (e.target.localName == "button") {
+    resetGame();
+  }
+});
