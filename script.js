@@ -1,9 +1,11 @@
 function addGameMessage(message) {
-  $("#gameText").append(`${message}<br>`);
+  const messageDiv = document.createElement("div");
+  messageDiv.innerText = message;
+  document.querySelector("#gameText").appendChild(messageDiv);
 }
 
 function wipeGameMessages() {
-  $("#gameText").text('');
+  document.querySelector("#gameText").textContent = "";
 }
 
 function resetGame() {
@@ -11,7 +13,10 @@ function resetGame() {
   computerScore = 0;
   roundNumber = 0;
   wipeGameMessages();
-  $("#gameText").append('<br><b>Game Reset!!</b>');
+
+  const resetText = document.createElement('p');
+  resetText.textContent = "Game Reset!!";
+  document.querySelector("#gameText").appendChild(resetText);
   updateScoreboard();
 }
 
@@ -36,12 +41,12 @@ function getRandomNumber() {
   return randomNum;
 }
 
-function playRound(event) {
+function playRound(playerSelection) {
   wipeGameMessages();
   roundNumber++;
-  addGameMessage(`<br><b>Round ${roundNumber} started.</b>`);
+  addGameMessage(`Round ${roundNumber} started.`);
+  addGameMessage(`You picked ${playerSelection}.`);
   let result;
-  let playerSelection = getPlayerSelection(event);
   let computerSelection = computerPlay();
   switch(playerSelection) {
     case "rock":
@@ -188,12 +193,12 @@ function tellFinalScore() {
 // }
 
 
-function getPlayerSelection(event) {
+// function getPlayerSelection(event) {
   // console.log(`event.target.id: ${event.target.id}`);
-  const selection = event.target.id;
+  // const selection = event.target.id;
   // console.log(`You picked ${selection}.`);
-  addGameMessage(`You picked ${selection}.`);
-  return selection;
+  // addGameMessage(`You picked ${selection}.`);
+  // return selection;
   // let validated = false;
   // let answer;
   // const validAnswers = ['rock', 'paper', 'scissors'];
@@ -209,7 +214,7 @@ function getPlayerSelection(event) {
   //
   //
   // return answer;
-}
+// }
 
 // Global Variables
 let playerScore = 0;
@@ -217,24 +222,59 @@ let computerScore = 0;
 let roundNumber = 0;
 
 function updateScoreboard() {
-  $("#playerScore").text(playerScore);
-  $("#computerScore").text(computerScore);
-  $("#roundNumber").text(roundNumber);
+  document.querySelector("#playerScore").innerText = playerScore;
+  document.querySelector("#computerScore").innerText = computerScore;
+  document.querySelector("#roundNumber").innerText = roundNumber;
 }
 
 function startGame(event) {
-  let newControls = `<div>Pick your choice!<br><br>
-  <button id="rock">Rock</button> <button id="paper">Paper</button> <button id="scissors">Scissors</button></div>`
-  console.log("game started");
-  controls.innerHTML = newControls;
-  $("#resetGameContainer").append('<button id="resetBtn">Reset Game</button><br><br>');
+  const newControls = document.createElement('div');
+  newControls.setAttribute("id", "instructions");
+  newControls.textContent = "Pick your choice!"
+
+  const buttonRow = document.createElement('div');
+  buttonRow.classList.add("buttonRow");
+
+  function createButton(name) {
+    const button = document.createElement('button');
+    button.setAttribute('id', name);
+    button.textContent = name;
+    return button;
+  }
+  const rockBtn = createButton("rock");
+  const paperBtn = createButton("paper");
+  const scissorsBtn = createButton("scissors");
+  buttonRow.appendChild(rockBtn);
+  buttonRow.appendChild(paperBtn);
+  buttonRow.appendChild(scissorsBtn);
+  newControls.appendChild(buttonRow);
+
+  const controlsDiv = document.querySelector("div#controls");
+  controlsDiv.removeChild(controlsDiv.childNodes[0]);
+  controlsDiv.appendChild(newControls);
+
+  const resetBtn = createButton("reset");
+  const resetGameDiv = document.querySelector("div#resetGame");
+  resetGameDiv.appendChild(resetBtn);
+
   updateScoreboard();
+  console.log("game started");
 }
 
 
+// Events
 
-$("#startBtn").click(startGame);
-$("#controls").on("click", "#rock", playRound);
-$("#controls").on("click", "#paper", playRound);
-$("#controls").on("click", "#scissors", playRound);
-$("#resetGameContainer").on("click", "#resetBtn", resetGame);
+document.querySelector("#startBtn").addEventListener("click", startGame);
+
+document.querySelector("#controls").addEventListener("click", (e) => {
+  if (e.target.localName == "button" && e.target.id != "startBtn") {
+    const playerSelection = e.target.id;
+    playRound(playerSelection);
+  }
+});
+
+document.querySelector("#resetGame").addEventListener("click", (e) => {
+  if (e.target.localName == "button") {
+    resetGame();
+  }
+});
